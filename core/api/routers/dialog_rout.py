@@ -24,7 +24,7 @@ class DialogRouter:
         pass
 
     @dialog_router.get('/chat', summary="Получение чатов пользователя") 
-    async def create_new_chat(self) -> str:
+    async def get_chats(self) -> str:
         pass
     
     
