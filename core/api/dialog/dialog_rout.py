@@ -6,7 +6,7 @@ from ..global_funcs import exception_handler
 from .dialog_schemas import Answer, ChatSchema, MessageSchema
 from .dialog_service import DialogService
 from database.database import get_session_obj
-from database.models import PlatformType
+from database.models import PlatformTypes
 
 dialog_router = APIRouter()
 
@@ -26,7 +26,7 @@ class DialogRouter:
     @dialog_router.post("/user", summary="Создание нового пользователя")
     @exception_handler
     async def create_new_user(self) -> str:
-        return await self.dialog_service.create_new_user(platform_type=PlatformType.web)
+        return await self.dialog_service.create_new_user(platform_type=PlatformTypes.web)
 
     # Блок с чатами (Изпользуется вебом)
     @dialog_router.post("/chat", summary="Создание нового чата")
