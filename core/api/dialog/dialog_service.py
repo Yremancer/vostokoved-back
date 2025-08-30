@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from config import LLM_ON
+from ..api_exceptions import UserNotFoundHttpException
 from .dialog_funcs import get_response
 from database.models import PlatformTypes
 from .dialog_repo import DialogRepository
@@ -75,7 +76,7 @@ class DialogService:
         user_id = await self.dialog_repository.get_user(session_id=session_id)
 
         if not user_id:
-            raise
+            raise UserNotFoundHttpException()
 
         chat_data = {
             "user_id": user_id,
@@ -89,7 +90,7 @@ class DialogService:
         user_id = await self.dialog_repository.get_user(session_id=session_id)
 
         if not user_id:
-            raise
+            raise UserNotFoundHttpException()
 
         chats = await self.dialog_repository.get_chats(user_id=user_id)
 
@@ -105,8 +106,8 @@ class DialogService:
         messages = await self.dialog_repository.get_messages(chat_id=chat_id)
 
         if not messages:
-            raise
+            raise []
 
-        return []
+        return messages
 
     
