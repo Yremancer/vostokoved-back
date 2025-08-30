@@ -7,7 +7,7 @@ from config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 # DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 #Url для sqlite базы
-DATABASE_URL = "sqlite+aiosqlite:///database/dventor.db"
+DATABASE_URL = "sqlite+aiosqlite:///database/vostokoved.db"
 base = declarative_base()
 
 
@@ -20,3 +20,7 @@ async def get_session_obj() -> AsyncGenerator[AsyncSession, None]:
     async with session.begin():
         yield session
     await session.close()
+
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(base.metadata.create_all)

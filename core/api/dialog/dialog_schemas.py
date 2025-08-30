@@ -6,6 +6,9 @@ class Answer(BaseModel):
     user_message_id: int = Field(...)
     model_message: str = Field(...)       
 
+class SendMessageSchema(BaseModel):
+    text: str = Field(...),
+    chat_id: int = Field(...)
 
 class MessageSchema(BaseModel):
     id: int = Field(...)

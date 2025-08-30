@@ -14,3 +14,5 @@ DB_PASS = os.getenv('DB_PASS')
 DB_PORT = os.getenv('DB_PORT')
 DB_USER = os.getenv('DB_USER')
 
+LLM_ON = True if os.getenv('LLM_ON') == "True" else False
+

@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 from fastapi_restful.cbv import cbv
 from sqlalchemy.ext.asyncio import AsyncSession
-from .dialog_funcs import get_session_id
 from ..global_funcs import exception_handler
-from .dialog_schemas import Answer, ChatSchema, MessageSchema
+from .dialog_schemas import Answer, ChatSchema, MessageSchema, SendMessageSchema
 from .dialog_service import DialogService
 from database.database import get_session_obj
 from database.models import PlatformTypes
@@ -16,7 +15,7 @@ class DialogRouter:
 
     def __init__(
         self,
-        session_id: str | None = Depends(get_session_id),
+        session_id: str | None = Header(None),
         db_session: AsyncSession = Depends(get_session_obj),
     ):
         self.session_id = session_id
@@ -42,8 +41,8 @@ class DialogRouter:
     # Блок с сообщениями
     @dialog_router.post("/message", summary="Отправка сообщения")
     @exception_handler
-    async def send_message(self, text: str, chat_id: int) -> Answer:
-        return await self.dialog_service.send_message(text=text, chat_id = chat_id)
+    async def send_message(self, send_message: SendMessageSchema) -> Answer:
+        return await self.dialog_service.send_message(text=send_message.text, chat_id = send_message.chat_id)
 
     @dialog_router.get("/message", summary="Получение сообщений чата")
     @exception_handler

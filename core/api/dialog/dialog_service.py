@@ -1,4 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from config import LLM_ON
+from .dialog_funcs import get_response
 from database.models import PlatformTypes
 from .dialog_repo import DialogRepository
 from uuid import uuid4
@@ -16,18 +18,28 @@ class DialogService:
         user_message_data = {"chat_id": chat_id, "text": text, "sender": Senders.user}
 
         user_message_id = await self.dialog_repository.create_new_message(
-            user_message_data=user_message_data
+            message_data=user_message_data
         )
 
         # Какой либо запрос к llm, но пока так
-        model_message_data = {
-            "chat_id": chat_id,
-            "text": "Тестовый ответ",
-            "sender": Senders.model,
-        }
+
+        if LLM_ON:
+            responce = await get_response(query=text)
+
+            model_message_data = {
+                "chat_id": chat_id,
+                "text": responce['answer'],
+                "sender": Senders.model,
+            }
+        else:
+            model_message_data = {
+                "chat_id": chat_id,
+                "text": "Тестовый ответ",
+                "sender": Senders.model,
+            }
 
         await self.dialog_repository.create_new_message(
-            user_message_data=model_message_data
+            message_data=model_message_data
         )
 
         return {
@@ -38,7 +50,7 @@ class DialogService:
     async def create_new_user(
         self, platform_type: PlatformTypes, telegram_id: int | None = None
     ) -> str:
-        session_id = uuid4()
+        session_id = str(uuid4())
 
         user_data = {
             "session_id": session_id,
@@ -49,7 +61,7 @@ class DialogService:
         return await self.dialog_repository.create_new_user(user_data=user_data)
 
     async def create_new_chat(self, session_id: int):
-        user_id = await self.dialog_repository.get_user_by_session_id(
+        user_id = await self.dialog_repository.get_user(
             session_id=session_id
         )
 
@@ -66,7 +78,7 @@ class DialogService:
         if not user_id:
             raise
 
-        chats = await self.dialog_repository.get_chats(session_id=session_id)
+        chats = await self.dialog_repository.get_chats(user_id=user_id)
 
         if not chats:
             raise

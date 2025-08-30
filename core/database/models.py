@@ -26,7 +26,7 @@ class User(base):
 class Chat(base):
     __tablename__ = "chats"
     id: int = Column(Integer, primary_key=True)
-    user_id: int = Column(ForeignKey(column="users.id"), nullable=False)
+    user_id: int = Column(ForeignKey(column="users.id", ondelete="CASCADE"), nullable=False)
 
     name: str = Column(String, nullable=False)
 
@@ -34,7 +34,7 @@ class Chat(base):
 class Message(base):
     __tablename__ = "messages"
     id: int = Column(Integer, primary_key=True)
-    chat_id: int = Column(ForeignKey(column="chats.id"), nullable=False)
+    chat_id: int = Column(ForeignKey(column="chats.id", ondelete="CASCADE"), nullable=False)
 
     text: str = Column(String, nullable=False)
     sender: Senders = Column(Enum(Senders), nullable=False)
