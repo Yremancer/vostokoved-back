@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .routers.dialog_rout import dialog_router
+from .dialog.dialog_rout import dialog_router
 
 
 api_controller = APIRouter()

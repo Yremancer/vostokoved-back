@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, Enum, String
-from database import base
+from database.database import base
 from enum import Enum as PyEnum
 
 
@@ -8,10 +8,11 @@ class PlatformTypes(PyEnum):
     telegram = "telegram"
     max = "max"
 
+
 class Senders(PyEnum):
     user = "user"
     model = "model"
-    
+
 
 class User(base):
     __tablename__ = "users"
@@ -19,17 +20,21 @@ class User(base):
     platform_type: PlatformTypes = Column(Enum(PlatformTypes), nullable=False)
     session_id: str = Column(String, unique=True, nullable=False)
 
+    telegram_id: int = Column(String, unique=True, nullable=True)
+
 
 class Chat(base):
     __tablename__ = "chats"
     id: int = Column(Integer, primary_key=True)
-    user_id: int = Column(ForeignKey(column='users.id'), nullable=False)
+    user_id: int = Column(ForeignKey(column="users.id"), nullable=False)
+
+    name: str = Column(String, nullable=False)
 
 
 class Message(base):
     __tablename__ = "messages"
     id: int = Column(Integer, primary_key=True)
-    chat_id: int = Column(ForeignKey(column='chats.id'), nullable=False)
+    chat_id: int = Column(ForeignKey(column="chats.id"), nullable=False)
 
     text: str = Column(String, nullable=False)
     sender: Senders = Column(Enum(Senders), nullable=False)
