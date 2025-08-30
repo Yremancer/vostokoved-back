@@ -47,5 +47,5 @@ class DialogRouter:
 
     @dialog_router.get("/message", summary="Получение сообщений чата")
     @exception_handler
-    async def get_chats(self, chat_id: int) -> list[MessageSchema]:
+    async def get_messages(self, chat_id: int) -> list[MessageSchema]:
         return await self.dialog_service.get_chat_messages(chat_id = chat_id)
