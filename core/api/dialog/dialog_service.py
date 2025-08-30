@@ -109,5 +109,4 @@ class DialogService:
 
         return []
 
-    async def edit_message(self, message_id: int, text: str):
-        await self.dialog_repository.edit_message(message_id=message_id, text=text)
+    

@@ -54,7 +54,3 @@ class DialogRouter:
     async def get_messages(self, chat_id: int) -> list[MessageSchema]:
         return await self.dialog_service.get_chat_messages(chat_id = chat_id)
     
-    @dialog_router.post("/message-edit", summary="Получение чатов пользователя")
-    @exception_handler
-    async def edit_message(self, edit_message: EditMessageSchema):
-        await self.dialog_service.edit_message(message_id = edit_message.message_id, text = edit_message.text)

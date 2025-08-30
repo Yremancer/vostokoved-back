@@ -51,10 +51,6 @@ class DialogRepository:
         self.db_session.add(new_message)
         await self.db_session.flush()
         return new_message.id
-    
-    async def edit_message(self, message_id: int, text: str):
-        message = (await self.db_session.execute(select(Message).where(Message.id==message_id))).scalar()
-        message.text = text
-        await self.db_session.refresh()
+
         
         
