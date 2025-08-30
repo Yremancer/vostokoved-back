@@ -1,4 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Integer, Enum, String
+from datetime import date
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, Enum, String
 from database.database import base
 from enum import Enum as PyEnum
 
@@ -21,6 +22,7 @@ class User(base):
     session_id: str = Column(String, unique=True, nullable=False)
 
     telegram_id: int = Column(String, unique=True, nullable=True)
+    create_date: date = Column(TIMESTAMP, nullable=False)
 
 
 class Chat(base):
@@ -29,6 +31,7 @@ class Chat(base):
     user_id: int = Column(ForeignKey(column="users.id", ondelete="CASCADE"), nullable=False)
 
     name: str = Column(String, nullable=False)
+    create_date: date = Column(TIMESTAMP, nullable=False)
 
 
 class Message(base):
@@ -38,3 +41,4 @@ class Message(base):
 
     text: str = Column(String, nullable=False)
     sender: Senders = Column(Enum(Senders), nullable=False)
+    create_date: date = Column(TIMESTAMP, nullable=False)

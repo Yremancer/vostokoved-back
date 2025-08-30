@@ -10,6 +10,10 @@ class SendMessageSchema(BaseModel):
     text: str = Field(...),
     chat_id: int = Field(...)
 
+class EditMessageSchema(BaseModel):
+    message_id: int = Field(...),
+    text: str = Field(...)
+
 class MessageSchema(BaseModel):
     id: int = Field(...)
     text: str = Field(...)

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Header
 from fastapi_restful.cbv import cbv
 from sqlalchemy.ext.asyncio import AsyncSession
 from ..global_funcs import exception_handler
-from .dialog_schemas import Answer, ChatSchema, MessageSchema, SendMessageSchema
+from .dialog_schemas import Answer, ChatSchema, EditMessageSchema, MessageSchema, SendMessageSchema
 from .dialog_service import DialogService
 from database.database import get_session_obj
 from database.models import PlatformTypes
@@ -37,6 +37,11 @@ class DialogRouter:
     @exception_handler
     async def get_chats(self) -> list[ChatSchema]:
         return await self.dialog_service.get_user_chats(session_id = self.session_id)
+    
+    @dialog_router.post("/chat-delete", summary="Получение чатов пользователя")
+    @exception_handler
+    async def delete_chat(self, chat_id: int):
+        return await self.dialog_service.delete_chat(chat_id = chat_id)
 
     # Блок с сообщениями
     @dialog_router.post("/message", summary="Отправка сообщения")
@@ -48,3 +53,8 @@ class DialogRouter:
     @exception_handler
     async def get_messages(self, chat_id: int) -> list[MessageSchema]:
         return await self.dialog_service.get_chat_messages(chat_id = chat_id)
+    
+    @dialog_router.post("/message-edit", summary="Получение чатов пользователя")
+    @exception_handler
+    async def edit_message(self, edit_message: EditMessageSchema):
+        await self.dialog_service.edit_message(message_id = edit_message.message_id, text = edit_message.text)

@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import Chat, Message, PlatformTypes, User
 
@@ -34,6 +34,9 @@ class DialogRepository:
         
         return None
     
+    async def delete_chat(self, chat_id: int):
+        await self.db_session.execute(delete(Chat).where(Chat.id==chat_id))
+
     async def get_messages(self, chat_id: int):
 
         messages = (await self.db_session.execute(select(Message).where(Message.chat_id==chat_id))).scalars().all()
@@ -48,3 +51,10 @@ class DialogRepository:
         self.db_session.add(new_message)
         await self.db_session.flush()
         return new_message.id
+    
+    async def edit_message(self, message_id: int, text: str):
+        message = (await self.db_session.execute(select(Message).where(Message.id==message_id))).scalar()
+        message.text = text
+        await self.db_session.refresh()
+        
+        
