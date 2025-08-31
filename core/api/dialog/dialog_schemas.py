@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from pydantic import BaseModel, Field
 from database.models import Senders
 
@@ -19,9 +19,9 @@ class MessageSchema(BaseModel):
     id: int = Field(...)
     text: str = Field(...)
     sender: Senders = Field(...)
-    create_date: date = Field(...)
+    create_date: datetime = Field(...)
 
 class ChatSchema(BaseModel):
     id: int = Field(...)
     name: str = Field(...)
-    create_date: date = Field(...)
+    create_date: datetime = Field(...)
