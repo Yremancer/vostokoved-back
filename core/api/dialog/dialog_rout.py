@@ -38,7 +38,7 @@ class DialogRouter:
     async def get_chats(self) -> list[ChatSchema]:
         return await self.dialog_service.get_user_chats(session_id = self.session_id)
     
-    @dialog_router.post("/chat-delete", summary="Получение чатов пользователя")
+    @dialog_router.post("/chat-delete", summary="Удаления чата")
     @exception_handler
     async def delete_chat(self, chat_id: int):
         return await self.dialog_service.delete_chat(chat_id = chat_id)
